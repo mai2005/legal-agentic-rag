@@ -1,0 +1,44 @@
+# Environment variables (Sensitive data)
+.env
+.env.*
+.env.example
+
+# Python Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+
+# Python caching
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Databases and large generated data files
+data/qdrant/
+data/raw/
+data/processed/chunks.json
+data/selected-contexts/
+data/train.json
+data/public-official.json
+data/law-2018-luat-don-vi-hanh-chinh-kinh-te-dac-biet.md
+
+# Local IDE configuration
+.vscode/
+.idea/
+.project
+.settings/
+
+# Logs & Metrics
+*.log
+logs/
+logs.md
+log_metric
+log_metric/
+log_metrics/
+
+# Local run notes & scripts
+run.md
+run_tei.sh
+

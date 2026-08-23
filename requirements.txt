@@ -1,0 +1,10 @@
+datasets
+httpx
+qdrant-client
+neo4j>=5.20.0
+transformers
+fastembed>=0.3.0
+langgraph
+fastapi
+uvicorn
+python-dotenv
