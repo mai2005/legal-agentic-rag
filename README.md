@@ -2,7 +2,7 @@
 
 An **Agentic Retrieval-Augmented Generation (Agentic RAG)** system tailored for legal information retrieval, analysis, and question answering on Vietnamese legal documents.
 
-The system adopts a state-of-the-art **Multi-Agent Orchestration Workflow** built with **LangGraph**, combining **Hybrid Dense + Sparse Vector Retrieval (BGE-M3)** on **Qdrant**, multi-stage **RRF Fusion & Cross-Encoder Reranking**, and automated **Self-Correction & Anti-Hallucination Verification**.
+The system adopts a state-of-the-art **Multi-Agent Orchestration Workflow** built with **LangGraph**, combining **Hybrid Dense + Sparse Vector Retrieval (BGE-M3)** on **Qdrant**, **Legal Knowledge Graph (Neo4j)**, multi-stage **RRF Fusion & Cross-Encoder Reranking**, and automated **Self-Correction & Anti-Hallucination Verification**.
 
 ---
 
@@ -10,7 +10,8 @@ The system adopts a state-of-the-art **Multi-Agent Orchestration Workflow** buil
 
 - **Query Decomposition & DAG Dependency Planning**: Automatically analyzes complex legal queries, extracts entities, breaks them down into independent sub-queries, and constructs a Directed Acyclic Graph (DAG) for dependency-aware resolution.
 - **Context-Aware Query Rewriting**: Optimizes sub-queries with legal terminology and context for targeted retrieval.
-- **Hybrid Vector Retrieval**: Combines Dense Embedding (**BGE-M3**) with Sparse/Lexical BM25 indexing in **Qdrant Vector DB**.
+- **Hybrid Vector Retrieval**: Combines Dense Embedding (**BGE-M3**) with Sparse/Lexical BM25 & SPLADE indexing in **Qdrant Vector DB**.
+- **Legal Knowledge Graph Retrieval**: Navigates hierarchical structures (Document → Part → Chapter → Article) and entity relationships (references, amendments, legal concepts) on **Neo4j**.
 - **Multi-Stage Ranking & Fusion**: Merges multi-source results with **Reciprocal Rank Fusion (RRF)** and applies fine-grained semantic scoring using a **BGE Cross-Encoder Reranker**.
 - **Evidence Validation & Self-Correction Loop**: Validates the relevance and sufficiency of retrieved legal articles, automatically triggering query rewriting and retry cycles when confidence thresholds are not met.
 - **Answer Generation & Hallucination Verification**: Drafts grounded answers citing specific Articles and Legal Decrees, followed by automated verification to eliminate hallucinations.
@@ -45,7 +46,7 @@ The system adopts a state-of-the-art **Multi-Agent Orchestration Workflow** buil
         ┌─────────────┴─────────────┐            │
         ▼                           ▼            │
  [ Vector Retrieval ]      [ Graph Retrieval ]   │ (Self-Correction Loop)
-   (Dense + BM25)           (Mock / Fallback)   │
+   (Dense + BM25)              (Neo4j Graph)     │
         │                           │            │
         └─────────────┬─────────────┘            │
                       ▼                          │
@@ -88,9 +89,10 @@ The system adopts a state-of-the-art **Multi-Agent Orchestration Workflow** buil
 | **Language** | Python 3.10+ |
 | **Agentic Framework** | LangGraph |
 | **API Framework** | FastAPI, Uvicorn, Pydantic v2 |
-| **Embedding Model** | BAAI/bge-m3 (Dense + Sparse BM25) |
+| **Embedding Model** | BAAI/bge-m3 (Dense + Sparse BM25 / SPLADE) |
 | **Vector Database** | Qdrant |
-| **Reranker** | BAAI/bge-reranker-large (Cross-Encoder) |
+| **Graph Database** | Neo4j (Cypher, APOC) |
+| **Reranker** | BAAI/bge-reranker-v2-m3 (Cross-Encoder) |
 | **Inference Backend** | Text Embeddings Inference (TEI) |
 | **LLM Engine** | Qwen 2.5, OpenAI-compatible APIs, Google Gemini, Ollama |
 
@@ -98,7 +100,5 @@ The system adopts a state-of-the-art **Multi-Agent Orchestration Workflow** buil
 
 ## 🔮 Future Work
 
-- [ ] **Knowledge Graph Integration (GraphDB / Neo4j)**:
-  - Construct a comprehensive legal knowledge graph mapping statutory references (`references`), amendments (`amends`), and replacements (`replaces`) across laws and decrees.
-  - Implement full `graph_retrieval` node connectivity with Neo4j for automated validity checks and amendment tracing.
-- [ ] **Standardized Benchmark Evaluation**: Implement automated evaluation metrics (Hit Rate@K, MRR@K, NDCG@K)
+- [ ] **Standardized Benchmark Evaluation**: Triển khai bộ đánh giá tự động (Hit Rate@K, MRR@K, NDCG@K).
+- [ ] **Multi-Document Reasoning Enhancement**: Tối ưu hóa suy luận nâng cao liên điều khoản và đối chiếu văn bản hết hiệu lực.
