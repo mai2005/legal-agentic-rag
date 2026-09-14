@@ -7,4 +7,5 @@ fastembed>=0.3.0
 langgraph
 fastapi
 uvicorn
+pydantic>=2.0.0
 python-dotenv

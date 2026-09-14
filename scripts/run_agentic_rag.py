@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from src.llm.llm_client import LLMClient
 from src.embedding.embedding_client import BGEEmbeddingClient
 from src.storage.qdrant_store import QdrantVectorStore
+from src.storage.neo4j_store import Neo4jStore
 from src.rag.vector_retriever import VectorRetriever
 from src.rag.hybrid_retriever import HybridRetriever
 from src.rag.reranker import BGERerankerClient
@@ -67,7 +68,21 @@ def main():
     except Exception:
         reranker_client = None
 
-    graph_retriever = GraphRetriever()
+    try:
+        neo4j_store = Neo4jStore(
+            uri=os.getenv("NEO4J_URI"),
+            user=os.getenv("NEO4J_USER"),
+            password=os.getenv("NEO4J_PASSWORD"),
+            database=os.getenv("NEO4J_DATABASE"),
+        )
+        if not neo4j_store.verify_connectivity():
+            logger.warning("Không thể kết nối Neo4j, sử dụng mock GraphRetriever.")
+            neo4j_store = None
+    except Exception as e:
+        logger.warning(f"Lỗi khởi tạo Neo4jStore ({e}). Sử dụng mock.")
+        neo4j_store = None
+
+    graph_retriever = GraphRetriever(neo4j_store=neo4j_store)
 
     # 3. Khởi tạo Orchestrator Nodes & Compile Graph
     config = OrchestratorConfig(

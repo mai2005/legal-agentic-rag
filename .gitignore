@@ -17,6 +17,7 @@ __pycache__/
 
 # Databases and large generated data files
 data/qdrant/
+data/neo4j/
 data/raw/
 data/processed/chunks.json
 data/selected-contexts/
@@ -37,6 +38,7 @@ logs.md
 log_metric
 log_metric/
 log_metrics/
+EDA data
 
 # Local run notes & scripts
 run.md
